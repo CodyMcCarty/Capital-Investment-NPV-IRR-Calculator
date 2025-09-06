@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Capital Investment NPV IRR Calculator (Hello WASM)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            max-width: 640px;
+            margin: 3rem auto;
+            padding: 0 1rem;
+        }
+
+        .row {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        input {
+            width: 12rem;
+        }
+
+        #out {
+            margin-top: 1rem;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Capital Investment NPV IRR Calculator</h1>
+    <p>Enter a number; Go (WASM) doubles it.</p>
+
+    <div class="row">
+        <label for="n">Number:</label>
+        <input id="n" type="number" value="21" step="any" />
+        <button id="btn">Double it</button>
+    </div>
+    <div id="out"></div>
+
+    <!-- Go's WASM runtime shim (copy from $(go env GOROOT)/lib/wasm/wasm_exec.js) -->
+    <script src="wasm_exec.js"></script>
+    <script>
+        const go = new Go();
+        (async () => {
+            // Robust loader: works locally and on GitHub Pages.
+            const resp = await fetch('app.wasm');
+            let result;
+            try {
+                if ('instantiateStreaming' in WebAssembly) {
+                    result = await WebAssembly.instantiateStreaming(resp, go.importObject);
+                } else { throw 0; }
+            } catch {
+                const bytes = await resp.arrayBuffer();
+                result = await WebAssembly.instantiate(bytes, go.importObject);
+            }
+            // Do NOT await; main() blocks forever.
+            go.run(result.instance);
+        })();
+    </script>
+</body>
+
+</html>
