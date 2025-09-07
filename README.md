@@ -1,5 +1,7 @@
 # Capital-Investment-NPV-IRR-Calculator
 
+[demo](https://codymccarty.github.io/Capital-Investment-NPV-IRR-Calculator/)
+
 1. Make sure the runtime shim is present (you already copied this)  
 $`cp "$(go env GOROOT)/lib/wasm/wasm_exec.js" docs/`
 
